@@ -1,4 +1,4 @@
-import { isDate, isObject } from './util'
+import { isDate, isPlainObject } from './util'
 function encode(val:string):string{
   return encodeURIComponent(val)
     .replace(/%40/g, '@')
@@ -15,7 +15,7 @@ export function buildURL(url:string, params?:any):string{
   Object.keys(params).forEach((key)=>{
     const value = params[key]
     if(value === null || typeof value === 'undefined') return
-    let valueArr = []
+    let valueArr
     if(Array.isArray(value)){
       key += '[]'
       valueArr = value
@@ -25,7 +25,7 @@ export function buildURL(url:string, params?:any):string{
     valueArr.forEach((val)=>{
       if(isDate(val)){
         val = val.toISOString()
-      }else if(isObject(val)){
+      }else if(isPlainObject(val)){
         val = JSON.stringify(val)
       }
       paramsArr.push(`${encode(key)}=${encode(val)}`)
