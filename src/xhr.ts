@@ -1,5 +1,6 @@
 import { AxiosPromise, AxiosRequestConfig, AxiosResponse } from './types'
 import { parseHeaders } from './helpers/headers'
+import { createAxiosError } from './helpers/error'
 
 export default function xhr(config:AxiosRequestConfig):AxiosPromise{
   return new Promise((resolve,reject)=>{
@@ -14,10 +15,10 @@ export default function xhr(config:AxiosRequestConfig):AxiosPromise{
     }
     request.open(method.toUpperCase(),url,true)
     request.onerror = function(){
-      reject(new Error('Network error!'))
+      reject(createAxiosError('Network error!',config,null,request))
     }
     request.ontimeout = function(){
-      reject(new Error(`Timeout! exceed ${config.timeout}`))
+      reject(createAxiosError(`Timeout! exceed ${config.timeout}`,config,'ECONNABORTED',request))
     }
     // send前设置statechange函数
     request.onreadystatechange = function(){
@@ -48,7 +49,9 @@ export default function xhr(config:AxiosRequestConfig):AxiosPromise{
       if(request.status >= 200 && request.status <300){
         resolve(response)
       }else{
-        reject(new Error(`Error, status code: ${request.status}`))
+        reject(
+        createAxiosError(`Error, status code: ${request.status}`,config,null,request)
+        )
       }
     }
   })
