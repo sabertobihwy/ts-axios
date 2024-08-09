@@ -13,7 +13,7 @@ export default function xhr(config:AxiosRequestConfig):AxiosPromise{
     if(config.timeout){
       request.timeout = config.timeout
     }
-    request.open(method.toUpperCase(),url,true)
+    request.open(method.toUpperCase(),url!,true)
     request.onerror = function(){
       reject(createAxiosError('Network error!',config,null,request))
     }
