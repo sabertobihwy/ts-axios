@@ -1,7 +1,32 @@
-import { AxiosPromise, AxiosRequestConfig, Method } from '../types'
+import {
+  AxiosPromise,
+  AxiosRequestConfig,
+  AxiosResponse,
+  Method, RejectFn, ResolveFn
+} from '../types'
 import { dispatchRequest } from './dispatchRequest'
+import InterceptorManagerImpl from './InterceptorManagerImpl'
 
-export class Axios{
+interface Interceptors{
+  request:InterceptorManagerImpl<AxiosRequestConfig>
+  response:InterceptorManagerImpl<AxiosResponse>
+}
+
+interface PromiseChain<T>{
+  resolve: ResolveFn<T> | ((config:AxiosRequestConfig)=>AxiosPromise)
+  reject?:  RejectFn
+}
+
+export default class Axios{
+  interceptor: Interceptors
+
+  constructor() {
+    this.interceptor = {
+      request: new InterceptorManagerImpl(),
+      response: new InterceptorManagerImpl()
+    }
+  }
+
   request(url:any,config?:any):AxiosPromise{
     if(typeof url === 'string'){
       if(!config){
@@ -11,7 +36,15 @@ export class Axios{
     }else{
       config = url
     }
-    return dispatchRequest(config)
+    const chain:PromiseChain<any>[] = [{resolve: dispatchRequest, reject: undefined}]
+    this.interceptor.request.foreach((i)=>chain.unshift(i))
+    this.interceptor.response.foreach((i)=>chain.push(i))
+    let promise = Promise.resolve(config)
+    while(chain.length !== 0){
+      const{resolve,reject} = chain.shift()!
+      promise = promise.then(resolve,reject) // promise.then(resolve, reject)的resolve方法会用我的解决值作为参数，并执行
+    }
+    return promise
   }
   get(url:string,config?:AxiosRequestConfig):AxiosPromise{
     return this._requestMethodWithoutData(url,'GET',config)
