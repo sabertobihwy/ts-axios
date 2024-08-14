@@ -8,6 +8,7 @@ import {
 import { dispatchRequest } from './dispatchRequest'
 import InterceptorManagerImpl from './InterceptorManagerImpl'
 import mergeConfig from './MergeStrat'
+import { transform } from './transform'
 
 interface Interceptors{
   request:InterceptorManagerImpl<AxiosRequestConfig>

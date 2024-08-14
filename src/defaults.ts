@@ -1,4 +1,7 @@
 import { AxiosRequestConfig } from './types'
+import { processHeaders } from './helpers/headers'
+import { transformRequest, transformResp } from './helpers/data'
+
 
 const defaults:AxiosRequestConfig = {
   headers:{
@@ -7,7 +10,15 @@ const defaults:AxiosRequestConfig = {
     }
   },
   timeout: 0,
-  method: 'get'
+  method: 'get',
+  transformRequest:[function(data,headers):any{
+    processHeaders(headers,data)
+    return transformRequest(data)
+  }],
+  transformResponse:[function(data):any{
+    return transformResp(data)
+  }]
+
 }
 
 const methodWithoutData = ['get','options','delete','head']
