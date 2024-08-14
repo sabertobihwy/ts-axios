@@ -1,10 +1,9 @@
 import { AxiosPromise, AxiosRequestConfig, AxiosResponse } from '../types'
 import xhr from '../xhr'
 import { buildURL } from '../helpers/url'
-import { transformRequest, transformResp } from '../helpers/data'
+import { transformRequest } from '../helpers/data'
 import { flattenHeaders, processHeaders } from '../helpers/headers'
 import { transform } from './transform'
-import { config } from 'shelljs'
 
 export function dispatchRequest(config:AxiosRequestConfig):AxiosPromise {
   processConfig(config)
