@@ -1,6 +1,5 @@
 import axios from '../../src/axios'
 import qs from 'qs'
-import { transformRequest } from '../../src/helpers/data'
 import { AxiosTransformer } from '../../src'
 
 // axios.defaults.headers.common['test2'] = 222

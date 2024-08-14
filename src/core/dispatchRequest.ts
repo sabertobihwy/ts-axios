@@ -19,18 +19,18 @@ function processConfig(config:AxiosRequestConfig){
 }
 
 // data -> JSON
-function transformRequestData(config:AxiosRequestConfig){
-  return transformRequest(config.data)
-}
+// function transformRequestData(config:AxiosRequestConfig){
+//   return transformRequest(config.data)
+// }
 
 function transformURL(config:AxiosRequestConfig):string{
   const {url,params} = config
   return buildURL(url!,params)
 }
-function transformHeaders(config:AxiosRequestConfig){
-  const {headers = {}, data} = config
-  return processHeaders(headers,data)
-}
+// function transformHeaders(config:AxiosRequestConfig){
+//   const {headers = {}, data} = config
+//   return processHeaders(headers,data)
+// }
 
 function transformRespData(resp: AxiosResponse){
    resp.data = transform(resp.data,resp.headers,resp.config.transformResponse)
