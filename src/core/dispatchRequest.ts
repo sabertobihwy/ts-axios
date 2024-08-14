@@ -1,8 +1,8 @@
 import { AxiosPromise, AxiosRequestConfig, AxiosResponse } from '../types'
 import xhr from '../xhr'
 import { buildURL } from '../helpers/url'
-import { transformRequest, transformResp } from '../helpers/data'
-import { flattenHeaders, processHeaders } from '../helpers/headers'
+import { flattenHeaders } from '../helpers/headers'
+import { transform } from './transform'
 
 export function dispatchRequest(config:AxiosRequestConfig):AxiosPromise {
   processConfig(config)
@@ -13,26 +13,25 @@ export function dispatchRequest(config:AxiosRequestConfig):AxiosPromise {
 
 function processConfig(config:AxiosRequestConfig){
   config.url = transformURL(config)
-  config.headers = transformHeaders(config)
-  config.data = transformRequestData(config)
+  config.data = transform(config.data,config.headers,config.transformRequest)
   config.headers = flattenHeaders(config.headers,config.method!)
 }
 
 // data -> JSON
-function transformRequestData(config:AxiosRequestConfig){
-  return transformRequest(config.data)
-}
+// function transformRequestData(config:AxiosRequestConfig){
+//   return transformRequest(config.data)
+// }
 
 function transformURL(config:AxiosRequestConfig):string{
   const {url,params} = config
   return buildURL(url!,params)
 }
-function transformHeaders(config:AxiosRequestConfig){
-  const {headers = {}, data} = config
-  return processHeaders(headers,data)
-}
+// function transformHeaders(config:AxiosRequestConfig){
+//   const {headers = {}, data} = config
+//   return processHeaders(headers,data)
+// }
 
 function transformRespData(resp: AxiosResponse){
-  resp.data = transformResp(resp.data)
+   resp.data = transform(resp.data,resp.headers,resp.config.transformResponse)
   return resp
 }
