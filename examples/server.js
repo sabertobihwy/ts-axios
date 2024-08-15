@@ -4,9 +4,15 @@ const webpack = require('webpack')
 const webpackDevMiddleware = require('webpack-dev-middleware')
 const webpackHotMiddleware = require('webpack-hot-middleware')
 const WebpackConfig = require('./webpack.config')
+const cookieParser = require('cookie-parser')
+require('./server2')
+
 
 const app = express()
 const compiler = webpack(WebpackConfig)
+app.use(cookieParser())
+
+
 
 app.use(webpackDevMiddleware(compiler, {
   publicPath: '/__build__/',
@@ -32,6 +38,7 @@ registerExtendRouter()
 registerInterceptorRouter()
 registerConfigRouter()
 registerCancelRouter()
+registerMoreRouter()
 
 const port = process.env.PORT || 8080
 module.exports = app.listen(port, () => {
@@ -143,5 +150,12 @@ function registerCancelRouter(){
     setTimeout(()=>{
       res.end()
     },1000)
+  })
+}
+
+function registerMoreRouter(){
+  router.get('/more/get',function(req,res){
+    //console.log(req)
+    res.json(req.cookies)
   })
 }
