@@ -5,6 +5,7 @@ import { flattenHeaders } from '../helpers/headers'
 import { transform } from './transform'
 
 export function dispatchRequest(config:AxiosRequestConfig):AxiosPromise {
+  checkIfDuplicateCancel(config)
   processConfig(config)
   return xhr(config).then((res)=>{
     return transformRespData(res)
@@ -34,4 +35,10 @@ function transformURL(config:AxiosRequestConfig):string{
 function transformRespData(resp: AxiosResponse){
    resp.data = transform(resp.data,resp.headers,resp.config.transformResponse)
   return resp
+}
+
+function checkIfDuplicateCancel(config:AxiosRequestConfig){
+  if(config.cancelToken){
+    config.cancelToken.throwIfRequested()
+  }
 }
