@@ -15,8 +15,35 @@ import { AxiosTransformer } from '../../src'
 //   })
 // })
 
-axios({
-  transformRequest: [
+// axios({
+//   transformRequest: [
+//     function(data):any{
+//       return qs.stringify(data)
+//     }
+//     ,...(axios.defaults.transformRequest as AxiosTransformer[])
+//   ],
+//   transformResponse:[
+//     ...(axios.defaults.transformResponse as AxiosTransformer[])
+//     ,function(data):any{
+//       if(typeof data === 'object'){
+//           data['b'] = 'add b'
+//       }
+//       return data
+//     }
+//   ],
+//   method: 'post',
+//   url: '/config/post',
+//   data: {
+//     a: 'content a is a json object'
+//   }
+// }).then((res)=>{
+//   console.log(res.data)
+//
+//   // response:  a: 'content a is a json object'
+//   // after response: a: 'content a is a json object' b: 'add b'
+// })
+
+const instance = axios.create({transformRequest: [
     function(data):any{
       return qs.stringify(data)
     }
@@ -26,11 +53,13 @@ axios({
     ...(axios.defaults.transformResponse as AxiosTransformer[])
     ,function(data):any{
       if(typeof data === 'object'){
-          data['b'] = 'add b'
+        data['b'] = 'add c'
       }
       return data
     }
-  ],
+  ]})
+
+instance({
   method: 'post',
   url: '/config/post',
   data: {
@@ -38,7 +67,4 @@ axios({
   }
 }).then((res)=>{
   console.log(res.data)
-
-  // response:  a: 'content a is a json object'
-  // after response: a: 'content a is a json object' b: 'add b'
 })

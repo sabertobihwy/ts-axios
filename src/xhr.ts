@@ -4,7 +4,10 @@ import { createAxiosError } from './helpers/error'
 
 export default function xhr(config:AxiosRequestConfig):AxiosPromise{
   return new Promise((resolve,reject)=>{
-    const{data = null,url, method ='get', headers,responseType} = config
+    const{data = null,url,
+      method ='get',
+      headers,responseType,
+      cancelToken} = config
     const request = new XMLHttpRequest()
     if(responseType){
       // 默认"text"
@@ -43,6 +46,13 @@ export default function xhr(config:AxiosRequestConfig):AxiosPromise{
         request.setRequestHeader(name,headers[name])
       }
     })
+
+    if(cancelToken){
+      cancelToken.promise.then((cancel)=>{
+        request.abort()
+        reject(cancel)
+      })
+    }
     request.send(data)
 
     function handleResponse(response:AxiosResponse){
