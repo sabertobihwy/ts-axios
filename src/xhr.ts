@@ -7,6 +7,7 @@ export default function xhr(config:AxiosRequestConfig):AxiosPromise{
     const{data = null,url,
       method ='get',
       headers,responseType,
+      timeout,
       cancelToken,
       withCredentials} = config
     const request = new XMLHttpRequest()
@@ -14,11 +15,11 @@ export default function xhr(config:AxiosRequestConfig):AxiosPromise{
       // 默认"text"
       request.responseType = responseType
     }
-    if(config.timeout){
-      request.timeout = config.timeout
+    if(timeout){
+      request.timeout = timeout
     }
-    if(config.withCredentials){
-      request.withCredentials = config.withCredentials
+    if(withCredentials){
+      request.withCredentials = withCredentials
     }
     request.open(method.toUpperCase(),url!,true)
     request.onerror = function(){
