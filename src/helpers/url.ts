@@ -33,7 +33,7 @@ export function buildURL(url:string, params?:any):string{
   })
   // remove #hash
   const idx = url.indexOf('#')
-  if(idx != -1){
+  if(idx !== -1){
     url = url.slice(0,idx)
   }
   const serilalizedParams = paramsArr.join('&')

@@ -15,6 +15,7 @@ export interface AxiosRequestConfig{
   responseType?:XMLHttpRequestResponseType
   timeout?:number
   cancelToken?:CancelToken
+  withCredentials?: boolean
 
   transformRequest?: AxiosTransformer | AxiosTransformer[]
   transformResponse?: AxiosTransformer | AxiosTransformer[]
