@@ -1,6 +1,8 @@
 import { AxiosPromise, AxiosRequestConfig, AxiosResponse } from './types'
 import { parseHeaders } from './helpers/headers'
 import { createAxiosError } from './helpers/error'
+import { isSameOrigin } from './helpers/url'
+import cookie from './helpers/cookie'
 
 export default function xhr(config:AxiosRequestConfig):AxiosPromise{
   return new Promise((resolve,reject)=>{
@@ -9,7 +11,10 @@ export default function xhr(config:AxiosRequestConfig):AxiosPromise{
       headers,responseType,
       timeout,
       cancelToken,
-      withCredentials} = config
+      withCredentials,
+      xsrfCookieName,
+      xsrfHeaderName
+    } = config
     const request = new XMLHttpRequest()
     if(responseType){
       // 默认"text"
@@ -20,6 +25,13 @@ export default function xhr(config:AxiosRequestConfig):AxiosPromise{
     }
     if(withCredentials){
       request.withCredentials = withCredentials
+    }
+    // 配置withCredentials:true && same origin的时候才把token拿进headers
+    if((withCredentials || isSameOrigin(url!)) && xsrfCookieName){
+      const xsrfVal = cookie.read(xsrfCookieName)
+      if(xsrfVal && xsrfHeaderName){
+        headers[xsrfHeaderName] = xsrfVal
+      }
     }
     request.open(method.toUpperCase(),url!,true)
     request.onerror = function(){

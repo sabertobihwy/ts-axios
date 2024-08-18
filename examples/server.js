@@ -7,12 +7,9 @@ const WebpackConfig = require('./webpack.config')
 const cookieParser = require('cookie-parser')
 require('./server2')
 
-
 const app = express()
 const compiler = webpack(WebpackConfig)
 app.use(cookieParser())
-
-
 
 app.use(webpackDevMiddleware(compiler, {
   publicPath: '/__build__/',
@@ -23,7 +20,10 @@ app.use(webpackDevMiddleware(compiler, {
 }))
 app.use(webpackHotMiddleware(compiler))
 
-app.use(express.static(__dirname))
+app.use(express.static(__dirname,{
+  setHeaders(res){
+    res.cookie('XSRF-TOKEN-D','123abc')
+  }}))
 
 app.use(bodyParser.json())
 // app.use(bodyParser.text())
