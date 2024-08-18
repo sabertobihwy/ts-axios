@@ -17,8 +17,9 @@ const defaults:AxiosRequestConfig = {
   }],
   transformResponse:[function(data):any{
     return transformResp(data)
-  }]
-
+  }],
+  xsrfCookieName:'XSRF-TOKEN',
+  xsrfHeaderName:'X-XSRF-TOKEN'
 }
 
 const methodWithoutData = ['get','options','delete','head']

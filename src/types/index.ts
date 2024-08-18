@@ -16,6 +16,8 @@ export interface AxiosRequestConfig{
   timeout?:number
   cancelToken?:CancelToken
   withCredentials?: boolean
+  xsrfCookieName?:string
+  xsrfHeaderName?:string
 
   transformRequest?: AxiosTransformer | AxiosTransformer[]
   transformResponse?: AxiosTransformer | AxiosTransformer[]
