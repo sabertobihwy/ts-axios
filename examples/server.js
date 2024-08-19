@@ -5,6 +5,8 @@ const webpackDevMiddleware = require('webpack-dev-middleware')
 const webpackHotMiddleware = require('webpack-hot-middleware')
 const WebpackConfig = require('./webpack.config')
 const cookieParser = require('cookie-parser')
+const multipart = require('connect-multiparty');
+const path = require('path')
 require('./server2')
 
 const app = express()
@@ -28,6 +30,8 @@ app.use(express.static(__dirname,{
 app.use(bodyParser.json())
 // app.use(bodyParser.text())
 app.use(bodyParser.urlencoded({ extended: true }))
+app.use(multipart({uploadDir: path.resolve(__dirname,'upload-file')}))
+
 const router = express.Router()
 app.use(router)
 
@@ -158,4 +162,10 @@ function registerMoreRouter(){
     //console.log(req)
     res.json(req.cookies)
   })
+
+  router.post('/more/upload',function(req,res){
+    console.log(req.body, req.files)
+    res.json('upload success!!')
+  })
+
 }

@@ -1,13 +1,12 @@
-import { InterceptorManager } from '../types'
-import { RejectFn, ResolveFn } from '../types'
+import { InterceptorManager,RejectFn, ResolveFn } from '../types'
 
-export interface interceptorFn<T>{
+interface InterceptorFn<T>{
   resolve: ResolveFn<T>
   reject?: RejectFn
 }
 
 export default class InterceptorManagerImpl<T> implements InterceptorManager<T> {
-  private interceptors: Array<interceptorFn<T> | null>
+  private interceptors: Array<InterceptorFn<T> | null>
 
   constructor() {
     this.interceptors = []
@@ -26,7 +25,7 @@ export default class InterceptorManagerImpl<T> implements InterceptorManager<T> 
     }
   }
 
-  foreach(fn:(interceptor:interceptorFn<T>)=>void){
+  foreach(fn:(interceptor:InterceptorFn<T>)=>void){
     this.interceptors.forEach((i)=>{
       if(i !== null){
         fn(i)}
