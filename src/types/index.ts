@@ -21,6 +21,7 @@ export interface AxiosRequestConfig{
   onUploadProgress?:(e:ProgressEvent)=>void
   onDownloadProgress?:(e:ProgressEvent)=>void
   auth?:Authorization
+  validateStatus?:(status:number)=>boolean
 
   transformRequest?: AxiosTransformer | AxiosTransformer[]
   transformResponse?: AxiosTransformer | AxiosTransformer[]
