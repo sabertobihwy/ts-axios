@@ -20,6 +20,7 @@ export interface AxiosRequestConfig{
   xsrfHeaderName?:string
   onUploadProgress?:(e:ProgressEvent)=>void
   onDownloadProgress?:(e:ProgressEvent)=>void
+  auth?:Authorization
 
   transformRequest?: AxiosTransformer | AxiosTransformer[]
   transformResponse?: AxiosTransformer | AxiosTransformer[]
@@ -124,4 +125,9 @@ export interface Cancel{
 
 export interface CancelStatic{
   new (reason?:string):Cancel
+}
+
+export interface Authorization{
+  username: string
+  password: string
 }

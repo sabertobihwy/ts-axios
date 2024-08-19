@@ -4,7 +4,6 @@ import { createAxiosError } from './helpers/error'
 import { isSameOrigin } from './helpers/url'
 import cookie from './helpers/cookie'
 import { isFormData } from './helpers/util'
-import { head } from 'shelljs'
 
 export default function xhr(config:AxiosRequestConfig):AxiosPromise{
   return new Promise((resolve,reject)=>{
@@ -17,7 +16,8 @@ export default function xhr(config:AxiosRequestConfig):AxiosPromise{
       xsrfCookieName,
       xsrfHeaderName,
       onUploadProgress,
-      onDownloadProgress
+      onDownloadProgress,
+      auth
     } = config
     const request = new XMLHttpRequest()
 
@@ -35,6 +35,9 @@ export default function xhr(config:AxiosRequestConfig):AxiosPromise{
       }
       if(timeout){
         request.timeout = timeout
+      }
+      if(auth){
+        headers['Authorization'] = 'Basic '+ btoa(`${auth.username}:${auth.password}`)
       }
     }
     function configureEvent(){
