@@ -14,7 +14,7 @@ export function createInstance(initConfig:AxiosRequestConfig):AxiosStatic{
 }
 const axios = createInstance(defaults)
 
-axios.create = function(customConfig:AxiosRequestConfig){
+axios.create = function(customConfig?:AxiosRequestConfig){
   return createInstance(mergeConfig(defaults,customConfig))
 }
 axios.CancelToken = CancelToken
