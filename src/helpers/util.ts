@@ -1,3 +1,4 @@
+
 const toString = Object.prototype.toString
 
 export function isDate(val:any):val is Date{
@@ -45,4 +46,8 @@ export function deepMerge(...objs:any[]):any{
 
 export function isFormData(val:any): val is FormData{
   return typeof val !== 'undefined' && val instanceof FormData
+}
+
+export function isURLSearchParams(val:any): val is URLSearchParams{
+  return typeof val !== 'undefined' && val instanceof URLSearchParams
 }

@@ -24,8 +24,8 @@ function processConfig(config:AxiosRequestConfig){
 // }
 
 function transformURL(config:AxiosRequestConfig):string{
-  const {url,params} = config
-  return buildURL(url!,params)
+  const {url,params,paramSerializer} = config
+  return buildURL(url!,paramSerializer,params)
 }
 // function transformHeaders(config:AxiosRequestConfig){
 //   const {headers = {}, data} = config

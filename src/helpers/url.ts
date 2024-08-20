@@ -1,4 +1,4 @@
-import { isDate, isPlainObject } from './util'
+import { isDate, isPlainObject, isURLSearchParams } from './util'
 interface URLOrigin{
   protocol:string,
   host:string,
@@ -13,34 +13,42 @@ function encode(val:string):string{
     .replace(/%5B/g, '[')
     .replace(/%5D/g, ']');
 }
-export function buildURL(url:string, params?:any):string{
+export function buildURL(url:string, paramSerializer?: (params:any)=>string,params?:any):string{
   if(!params) return url
-  const paramsArr:string[] = []
-  Object.keys(params).forEach((key)=>{
-    const value = params[key]
-    if(value === null || typeof value === 'undefined') return
-    let valueArr
-    if(Array.isArray(value)){
-      key += '[]'
-      valueArr = value
-    }else{
-      valueArr = [value]
-    }
-    valueArr.forEach((val)=>{
-      if(isDate(val)){
-        val = val.toISOString()
-      }else if(isPlainObject(val)){
-        val = JSON.stringify(val)
+  let serilalizedParams
+  if(paramSerializer){
+    serilalizedParams = paramSerializer(params)
+  }else if(isURLSearchParams(params)){
+    serilalizedParams = params.toString()
+  }else{
+    const paramsArr:string[] = []
+    Object.keys(params).forEach((key)=>{
+      const value = params[key]
+      if(value === null || typeof value === 'undefined') return
+      let valueArr
+      if(Array.isArray(value)){
+        key += '[]'
+        valueArr = value
+      }else{
+        valueArr = [value]
       }
-      paramsArr.push(`${encode(key)}=${encode(val)}`)
+      valueArr.forEach((val)=>{
+        if(isDate(val)){
+          val = val.toISOString()
+        }else if(isPlainObject(val)){
+          val = JSON.stringify(val)
+        }
+        paramsArr.push(`${encode(key)}=${encode(val)}`)
+      })
     })
-  })
-  // remove #hash
-  const idx = url.indexOf('#')
-  if(idx !== -1){
-    url = url.slice(0,idx)
+    // remove #hash
+    const idx = url.indexOf('#')
+    if(idx !== -1){
+      url = url.slice(0,idx)
+    }
+    serilalizedParams = paramsArr.join('&')
   }
-  const serilalizedParams = paramsArr.join('&')
+
   if(serilalizedParams){
     url += url.search(/\?/) === -1?'?':'&'
     url += serilalizedParams
