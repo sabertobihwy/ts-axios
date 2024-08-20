@@ -23,6 +23,7 @@ export interface AxiosRequestConfig{
   auth?:Authorization
   validateStatus?:(status:number)=>boolean
   paramSerializer?:(params:any)=>string
+  baseURL?:string
 
   transformRequest?: AxiosTransformer | AxiosTransformer[]
   transformResponse?: AxiosTransformer | AxiosTransformer[]
