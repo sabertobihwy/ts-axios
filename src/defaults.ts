@@ -19,7 +19,10 @@ const defaults:AxiosRequestConfig = {
     return transformResp(data)
   }],
   xsrfCookieName:'XSRF-TOKEN',
-  xsrfHeaderName:'X-XSRF-TOKEN'
+  xsrfHeaderName:'X-XSRF-TOKEN',
+  validateStatus:function(status){
+    return status >= 200 && status <300;
+  }
 }
 
 const methodWithoutData = ['get','options','delete','head']

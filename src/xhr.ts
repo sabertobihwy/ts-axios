@@ -4,7 +4,6 @@ import { createAxiosError } from './helpers/error'
 import { isSameOrigin } from './helpers/url'
 import cookie from './helpers/cookie'
 import { isFormData } from './helpers/util'
-import { head } from 'shelljs'
 
 export default function xhr(config:AxiosRequestConfig):AxiosPromise{
   return new Promise((resolve,reject)=>{
@@ -17,7 +16,9 @@ export default function xhr(config:AxiosRequestConfig):AxiosPromise{
       xsrfCookieName,
       xsrfHeaderName,
       onUploadProgress,
-      onDownloadProgress
+      onDownloadProgress,
+      auth,
+      validateStatus
     } = config
     const request = new XMLHttpRequest()
 
@@ -35,6 +36,9 @@ export default function xhr(config:AxiosRequestConfig):AxiosPromise{
       }
       if(timeout){
         request.timeout = timeout
+      }
+      if(auth){
+        headers['Authorization'] = 'Basic '+ btoa(`${auth.username}:${auth.password}`)
       }
     }
     function configureEvent(){
@@ -100,7 +104,8 @@ export default function xhr(config:AxiosRequestConfig):AxiosPromise{
     }
 
     function handleResponse(response:AxiosResponse){
-      if(request.status >= 200 && request.status <300){
+      // 无规则定义status or 通过规则
+      if(!validateStatus || validateStatus(response.status)){
         resolve(response)
       }else{
         reject(

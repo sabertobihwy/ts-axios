@@ -1,7 +1,6 @@
 import { AxiosPromise, AxiosRequestConfig } from '../types'
 import { deepMerge, isPlainObject } from '../helpers/util'
 
-const mustConfig2 = ['url','data','params']
 const stratMap =  Object.create(null)
 
 function defaultStrat(val1:any, val2:any):any{
@@ -23,11 +22,14 @@ function complexMergeSrat(val1:any, val2:any):any{
     return val1
   }
 }
-
+const mustConfig2 = ['url','data','params']
 mustConfig2.forEach((key)=>{
   stratMap[key] = mustConfig2Strat
 })
-stratMap['headers'] = complexMergeSrat
+const stratDeepMerge = ['headers','auth']
+stratDeepMerge.forEach((key)=>{
+  stratMap[key] = complexMergeSrat
+})
 
 export default function mergeConfig(config1:AxiosRequestConfig, config2?:AxiosRequestConfig):AxiosRequestConfig{
   const config = Object.create(null)

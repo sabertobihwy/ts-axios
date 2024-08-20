@@ -7,6 +7,7 @@ const WebpackConfig = require('./webpack.config')
 const cookieParser = require('cookie-parser')
 const multipart = require('connect-multiparty');
 const path = require('path')
+const atob = require('atob')
 require('./server2')
 
 const app = express()
@@ -168,4 +169,26 @@ function registerMoreRouter(){
     res.json('upload success!!')
   })
 
+  router.post('/auth/post',function(req,res){
+    const encoded = req.headers.authorization
+    const [type,credentials] = encoded.split(' ')
+    const decoded = atob(credentials)
+    console.log(decoded)
+    const [username,pwd] = decoded.split(':')
+    if(type === 'Basic' && username === 'apple' && pwd === 'www'){
+      res.json('passed!')
+    }else{
+      res.status(401)
+      res.end('unauthorized!!')
+    }
+  })
+
+  router.get('/more/304',function(req,res){
+    res.status(304)
+    res.end()
+  })
+
+  router.get('/more/get',function(req,res){
+    res.json(req.query)
+  })
 }
