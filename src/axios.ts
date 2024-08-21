@@ -20,5 +20,9 @@ axios.create = function(customConfig?:AxiosRequestConfig){
 axios.CancelToken = CancelToken
 axios.Cancel = Cancel
 axios.isCancel = isCancel
+axios.all = function(promises){
+  return Promise.all(promises)
+}
+axios.Axios = Axios
 
 export default axios

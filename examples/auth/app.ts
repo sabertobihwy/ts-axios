@@ -1,6 +1,4 @@
 import axios from '../../src/axios'
-import { AxiosError } from '../../src'
-import qs from 'qs'
 
 // axios.post('/auth/post',{},{
 //   auth:{
@@ -27,43 +25,72 @@ import qs from 'qs'
 //   console.log(e.message)
 // })
 
-axios.get('/more/get',{
-  params: {
-    a: 'b',
-    c: 'd'
-  }
-}).then(res=>{
-  console.log(res)
+// serializedParams
+// axios.get('/more/get',{
+//   params: {
+//     a: 'b',
+//     c: 'd'
+//   }
+// }).then(res=>{
+//   console.log(res)
+// })
+//
+// axios.get('/more/get',{
+//   params: new URLSearchParams('a=b&c=d')
+// }).then(res=>{
+//   console.log(res)
+// })
+//
+// axios.get('/more/get',{
+//   params: {
+//     a: 1,
+//     b: 2,
+//     c: ['a','b','c']
+//   }
+// }).then(res=>{
+//   console.log(res)
+// })
+//
+// const instance = axios.create({
+//   paramSerializer: function(params):string{
+//     return qs.stringify(params, { arrayFormat: 'brackets' })
+//   }
+// })
+//
+// instance.get('/more/get',{
+//   params: {
+//     a: 1,
+//     b: 2,
+//     c: ['a','b','c']
+//   }
+// }).then(res=>{
+//   console.log(res)
+// })
+
+// absolute url
+// const instance = axios.create({
+//   baseURL: 'https://encrypted-tbn0.gstatic.com/'
+// })
+// instance.get('images?q=tbn:ANd9GcR20E6bHxiQS-eifQFfjaKlEQMoWw4EeccAGw&s')
+// instance.get('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR20E6bHxiQS-eifQFfjaKlEQMoWw4EeccAGw&s')
+//
+
+// axios.all && axios.getUri（） && axios.Axios
+axios.all(
+  [axios.get('/more/A'),
+  axios.get('/more/B')]
+  ).then(([resA, resB])=>{
+    console.log(resA.data)
+    console.log(resB.data)
 })
 
-axios.get('/more/get',{
-  params: new URLSearchParams('a=b&c=d')
-}).then(res=>{
-  console.log(res)
-})
-
-axios.get('/more/get',{
-  params: {
+const url = axios.getUri({
+   baseURL:'https://baidu.com',
+   url: '/guchuangtianya',
+    params: {
     a: 1,
     b: 2,
     c: ['a','b','c']
   }
-}).then(res=>{
-  console.log(res)
 })
-
-const instance = axios.create({
-  paramSerializer: function(params):string{
-    return qs.stringify(params, { arrayFormat: 'brackets' })
-  }
-})
-
-instance.get('/more/get',{
-  params: {
-    a: 1,
-    b: 2,
-    c: ['a','b','c']
-  }
-}).then(res=>{
-  console.log(res)
-})
+console.log(url)
