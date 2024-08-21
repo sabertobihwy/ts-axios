@@ -23,7 +23,7 @@ function processConfig(config:AxiosRequestConfig){
 //   return transformRequest(config.data)
 // }
 
-function transformURL(config:AxiosRequestConfig):string{
+export function transformURL(config:AxiosRequestConfig):string{
   let {url,params,paramSerializer,baseURL} = config
   if(baseURL && !isAbsoluteURL(url!)){
     url = combineURL(baseURL,url)

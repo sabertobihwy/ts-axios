@@ -65,6 +65,7 @@ export interface Axios{
   post<T=any>(url:string,data?:any,config?:AxiosRequestConfig):AxiosPromise<T>
   put<T=any>(url:string,data?:any,config?:AxiosRequestConfig):AxiosPromise<T>
   patch<T=any>(url:string,data?:any,config?:AxiosRequestConfig):AxiosPromise<T>
+  getUri(config?:AxiosRequestConfig):string
 }
 
 export interface InterceptorManager<T>{
@@ -96,7 +97,15 @@ export interface AxiosStatic extends AxiosInstance{
   CancelToken:CancelTokenStatic
   Cancel:CancelStatic
   isCancel:(val:any)=>boolean
+
+  all<T>(p:Array<T|Promise<T>>):Promise<T[]>
+  Axios:AxiosClassStatic
 }
+
+export interface AxiosClassStatic{
+  new (config:AxiosRequestConfig):Axios
+}
+
 export interface CancelTokenStatic{
   new (e:CancelExecutor):CancelToken
   source():CancelTokenSource
@@ -134,3 +143,5 @@ export interface Authorization{
   username: string
   password: string
 }
+
+

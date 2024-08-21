@@ -191,4 +191,11 @@ function registerMoreRouter(){
   router.get('/more/get',function(req,res){
     res.json(req.query)
   })
+
+  router.get('/more/A',function(req,res){
+    res.end('A')
+  })
+  router.get('/more/B',function(req,res){
+    res.end('B')
+  })
 }
